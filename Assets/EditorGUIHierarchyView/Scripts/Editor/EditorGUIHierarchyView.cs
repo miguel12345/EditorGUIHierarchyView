@@ -14,6 +14,7 @@ public class EditorGUIHierarchyView {
 	GUIStyle selectedLabel;
 	GUIStyle selectedFoldout;
 	GUIStyle normalFoldout;
+	Color defaultTextColor = new Color(0.705f, 0.705f, 0.705f);
 
 	Vector2 scrollPosition;
 	string previousNodeID;
@@ -117,17 +118,28 @@ public class EditorGUIHierarchyView {
 
 	//Returns true if this node is selected
 	public bool BeginNode(string label) {
-		return Node (label, true);
+		return Node (label, true, defaultTextColor,defaultTextColor);
+	}
+
+	//Returns true if this node is selected
+	public bool BeginNode(string label, Color unselectedTextColor, Color selectedTextColor) {
+		return Node (label, true,unselectedTextColor,selectedTextColor);
 	}
 
 
 	//Returns true if this node is selected
-	public bool Node(string label) {
+	public bool Node(string label, Color unselectedTextColor, Color selectedTextColor) {
 
-		return Node (label, false);
+		return Node (label, false, unselectedTextColor,selectedTextColor);
 	}
 
-	bool Node(string label, bool isParent) {
+	//Returns true if this node is selected
+	public bool Node(string label) {
+
+		return Node (label, false, defaultTextColor, defaultTextColor);
+	}
+
+	bool Node(string label, bool isParent, Color unselectedTextColor, Color selectedTextColor) {
 
 		var id = GetIDForLabel (label);
 
@@ -146,7 +158,16 @@ public class EditorGUIHierarchyView {
 		bool opened = false;
 
 		if (isParent) {
-			opened = EditorGUILayout.Foldout (wasOpened, label, isSelected ? selectedFoldout : normalFoldout);
+			GUIStyle styleToUse = isSelected ? selectedFoldout : normalFoldout;
+			Color colorToUse = isSelected ? selectedTextColor : unselectedTextColor;
+			styleToUse.normal.textColor = colorToUse;
+			styleToUse.onNormal.textColor = colorToUse;
+			styleToUse.active.textColor = colorToUse;
+			styleToUse.onActive.textColor = colorToUse;
+			styleToUse.focused.textColor = colorToUse;
+			styleToUse.onFocused.textColor = colorToUse;
+
+			opened = EditorGUILayout.Foldout (wasOpened, label, styleToUse);
 
 			if (isSelected && Event.current.type == EventType.keyDown && Event.current.keyCode == KeyCode.RightArrow) {
 				opened = true;
@@ -156,7 +177,13 @@ public class EditorGUIHierarchyView {
 				Event.current.Use ();
 			}
 		} else {
-			EditorGUILayout.LabelField ( label, IsSelected(id)?selectedLabel:foldoutChildessStyle);
+			GUIStyle styleToUse = isSelected ?selectedLabel:foldoutChildessStyle;
+			Color colorToUse = isSelected ? selectedTextColor : unselectedTextColor;
+
+			styleToUse.normal.textColor = colorToUse;
+			styleToUse.active.textColor = colorToUse;
+
+			EditorGUILayout.LabelField ( label, styleToUse);
 		}
 
 		EditorGUILayout.EndHorizontal ();
