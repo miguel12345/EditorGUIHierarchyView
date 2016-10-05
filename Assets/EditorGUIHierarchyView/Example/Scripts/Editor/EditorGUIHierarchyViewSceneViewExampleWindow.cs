@@ -10,9 +10,6 @@ public class EditorGUIHierarchyViewSceneViewExampleWindow : EditorWindow
 
 	EditorGUIHierarchyView hierarchyView = new EditorGUIHierarchyView();
 
-	Color activeColor = new Color(0.705f, 0.705f, 0.705f);
-	Color inactiveColor = Color.gray;
-
 	[MenuItem ("EditorGUIHierarchyViewExampleWindow/Show Scene View")]
 	static void Init ()
 	{
@@ -49,28 +46,26 @@ public class EditorGUIHierarchyViewSceneViewExampleWindow : EditorWindow
 
 	void DrawGameObject(GameObject go) {
 		if (go.transform.childCount > 0) {
-			hierarchyView.BeginNode (go.name,GetUnselectedTextColorForGameObject (go), GetSelectedTextColorForGameObject (go));
+
+			if (go.activeInHierarchy) {
+				hierarchyView.BeginNode (go.name);
+			} else {
+				hierarchyView.BeginNode (go.name,Color.gray,Color.gray);	
+			}
+
 			foreach (Transform child in go.transform) {
 				DrawGameObject (child.gameObject);
 			}
 			hierarchyView.EndNode ();
 		} else {
-			hierarchyView.Node (go.name, GetUnselectedTextColorForGameObject (go), GetSelectedTextColorForGameObject (go));
+
+			if (go.activeInHierarchy) {
+				hierarchyView.Node (go.name);
+			} else {
+				hierarchyView.Node (go.name,Color.gray,Color.gray);	
+			}
+
 		}
-	}
-
-	Color GetSelectedTextColorForGameObject(GameObject go) {
-		if (go.activeInHierarchy)
-			return Color.white;
-		else
-			return activeColor;
-	}
-
-	Color GetUnselectedTextColorForGameObject(GameObject go) {
-		if (go.activeInHierarchy)
-			return activeColor;
-		else
-			return inactiveColor;
 	}
 }
 

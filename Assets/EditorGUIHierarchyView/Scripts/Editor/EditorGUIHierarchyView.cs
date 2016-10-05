@@ -14,7 +14,15 @@ public class EditorGUIHierarchyView {
 	GUIStyle selectedLabel;
 	GUIStyle selectedFoldout;
 	GUIStyle normalFoldout;
-	Color defaultTextColor = new Color(0.705f, 0.705f, 0.705f);
+
+	Color defaultSelectedTextColorDarkSkin = Color.white;
+	Color defaultUnselectedTextColorDarkSkin = new Color(0.705f, 0.705f, 0.705f);
+	Color defaultSelectedTextColorWhiteSkin = Color.white;
+	Color defaultUnselectedTextColorWhiteSkin = Color.black;
+
+	Color defaultSelectedTextColor;
+	Color defaultUnselectedTextColor;
+	bool defaultTextColorsSet ;
 
 	Vector2 scrollPosition;
 	string previousNodeID;
@@ -65,6 +73,23 @@ public class EditorGUIHierarchyView {
 		normalFoldout.focused = normalFoldout.normal;
 		normalFoldout.onActive = normalFoldout.onNormal;
 		normalFoldout.onFocused = normalFoldout.onNormal;
+
+		SetDefaultTextColors ();
+	}
+
+	void SetDefaultTextColors() {
+		if (defaultTextColorsSet)
+			return;
+
+		if (EditorGUIUtility.isProSkin) {
+			defaultSelectedTextColor = defaultSelectedTextColorDarkSkin;
+			defaultUnselectedTextColor = defaultUnselectedTextColorDarkSkin;
+		} else {
+			defaultSelectedTextColor = defaultSelectedTextColorWhiteSkin;
+			defaultUnselectedTextColor = defaultUnselectedTextColorWhiteSkin;
+		}
+
+		defaultTextColorsSet = true;
 	}
 
 	private Texture2D MakeTex(int width, int height, Color col)
@@ -118,7 +143,7 @@ public class EditorGUIHierarchyView {
 
 	//Returns true if this node is selected
 	public bool BeginNode(string label) {
-		return Node (label, true, defaultTextColor,defaultTextColor);
+		return Node (label, true, defaultUnselectedTextColor,defaultSelectedTextColor);
 	}
 
 	//Returns true if this node is selected
@@ -136,7 +161,7 @@ public class EditorGUIHierarchyView {
 	//Returns true if this node is selected
 	public bool Node(string label) {
 
-		return Node (label, false, defaultTextColor, defaultTextColor);
+		return Node (label, false, defaultUnselectedTextColor,defaultSelectedTextColor);
 	}
 
 	bool Node(string label, bool isParent, Color unselectedTextColor, Color selectedTextColor) {
