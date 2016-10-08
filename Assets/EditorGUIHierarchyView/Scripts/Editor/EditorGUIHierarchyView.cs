@@ -196,10 +196,8 @@ public class EditorGUIHierarchyView {
 
 			if (isSelected && Event.current.type == EventType.keyDown && Event.current.keyCode == KeyCode.RightArrow) {
 				opened = true;
-				Event.current.Use ();
 			} else if (isSelected && Event.current.type == EventType.keyDown && Event.current.keyCode == KeyCode.LeftArrow) {
 				opened = false;
-				Event.current.Use ();
 			}
 		} else {
 			GUIStyle styleToUse = isSelected ?selectedLabel:foldoutChildessStyle;
@@ -213,14 +211,16 @@ public class EditorGUIHierarchyView {
 
 		EditorGUILayout.EndHorizontal ();
 
+		bool useCurrentEvent = false;
 
 		if (wasOpened != opened) {
+			useCurrentEvent = true;
 			if (opened)
 				Open (id);
 			else
 				Close (id);
 		} else if(touchedInside) {
-
+			useCurrentEvent = true;
 			if (Event.current.command) {
 				if (IsSelected (id)) {
 					RemoveFromSelection (id);
@@ -235,6 +235,10 @@ public class EditorGUIHierarchyView {
 		HandleKeyboardCycle (previousNodeID, id);
 
 		previousNodeID = id;
+
+		if(useCurrentEvent) {
+			Event.current.Use ();
+		}
 
 
 		if (isParent && !opened) {
