@@ -10,7 +10,7 @@ public class EditorGUIHierarchyViewSceneViewExampleWindow : EditorWindow
 
 	EditorGUIHierarchyView hierarchyView = new EditorGUIHierarchyView();
 
-	[MenuItem ("EditorGUIHierarchyViewExampleWindow/Show Scene View")]
+	[MenuItem ("Window/EditorGUIHierarchy - Show Scene View")]
 	static void Init ()
 	{
 		EditorGUIHierarchyViewSceneViewExampleWindow window = (EditorGUIHierarchyViewSceneViewExampleWindow)GetWindow (typeof(EditorGUIHierarchyViewSceneViewExampleWindow));

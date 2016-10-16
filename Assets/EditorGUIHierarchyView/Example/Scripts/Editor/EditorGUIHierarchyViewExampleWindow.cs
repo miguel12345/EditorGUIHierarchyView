@@ -7,7 +7,7 @@ public class EditorGUIHierarchyViewExampleWindow : EditorWindow {
 
 	EditorGUIHierarchyView hierarchyView = new EditorGUIHierarchyView();
 
-	[MenuItem ("EditorGUIHierarchyViewExampleWindow/Show Example Window")]
+	[MenuItem ("Window/EditorGUIHierarchy - Show Example Window")]
 	static void Init ()
 	{
 		EditorGUIHierarchyViewExampleWindow window = (EditorGUIHierarchyViewExampleWindow)GetWindow (typeof(EditorGUIHierarchyViewExampleWindow));
